@@ -6,7 +6,7 @@
 <meta name="description" content="دليل السودان الشامل للأنشطة التجارية والصحية والتعليمية والخدمات في جميع الولايات السودانية">
 <style>
 :root{font-family:Tahoma,Arial,sans-serif;color:#1d3d31;background:#f5f8f4}*{box-sizing:border-box}body{margin:0}a{color:inherit}header{color:white;background:linear-gradient(120deg,#086d48,#2c9666);padding:26px 20px 75px}nav{max-width:1120px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:14px}nav strong{font-size:21px}.hero{text-align:center;margin:65px auto 0;max-width:800px}.hero h1{font-size:clamp(30px,4.5vw,49px);margin:0 0 15px}.hero p{line-height:1.9;color:#e5f9ed}.container{max-width:1120px;margin:-38px auto 30px;padding:0 18px}.filters{padding:20px;background:white;border-radius:18px;box-shadow:0 12px 40px #0002;display:grid;grid-template-columns:2fr 1fr 1fr;gap:12px}input,select{font:inherit;padding:15px 12px;width:100%;border:1px solid #cfdfd4;border-radius:11px;background:white;color:#244534}input:focus,select:focus{outline:2px solid #39a06d}.heading{display:flex;justify-content:space-between;gap:16px;align-items:center;margin:30px 0 18px}.heading p{color:#6a7d6e;font-size:13px}.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:15px}.card{background:white;border:1px solid #e0eae2;border-radius:16px;padding:20px;min-height:184px}.card h2{font-size:20px;margin:12px 0}.tag{background:#e5f6e9;border-radius:20px;color:#087248;padding:5px 10px;font-size:12px}.sub{font-size:14px;line-height:1.8;color:#66786c}.links{display:flex;gap:15px;flex-wrap:wrap;margin-top:15px}.links a{text-decoration:none;color:#087348;font-weight:700}.empty{text-align:center;grid-column:1/-1;background:#fff;padding:55px 18px;border-radius:16px;color:#617365}.notice{border:1px solid #f6d9aa;background:#fff7ea;padding:17px;border-radius:12px;margin:23px 0;color:#694b2d;font-size:14px;line-height:1.8}footer{padding:24px;text-align:center;color:#65736a;font-size:13px}@media(max-width:700px){.filters{grid-template-columns:1fr}.heading{display:block}.hero{margin-top:48px}nav{flex-wrap:wrap}}
-</style>
+.suggestBox{margin:24px 0;background:#fff;border:1px solid #dce9df;border-radius:16px;padding:18px}.suggestBox summary{cursor:pointer;color:#087348;font-weight:700;font-size:17px}.suggestGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:16px}.suggestGrid label{display:block;font-size:13px;color:#52665a}.suggestGrid input,.suggestGrid select{margin-top:5px}.suggestBox button{margin-top:14px;border:0;border-radius:10px;padding:13px 18px;background:#087348;color:#fff;font:inherit;cursor:pointer}.suggestNotice{font-size:14px;color:#38664f;line-height:1.8}.suggestHoneypot{position:absolute;left:-10000px;opacity:0}@media(max-width:700px){.suggestGrid{grid-template-columns:1fr}}</style>
 </head>
 <body>
 <header><nav><strong>🇸🇩 دليل السودان الشامل</strong><span>Sudan National Directory</span></nav>
@@ -19,13 +19,50 @@
 </section>
 <div class="heading"><strong id="count">تحميل بيانات الدليل...</strong><p>تظهر في كل نتيجة نوع المنشأة، عنوانها، ساعات العمل، وسائل التواصل، ورابط موقعها على خرائط Google.</p></div>
 <section id="results" class="cards" aria-live="polite"></section>
-<div class="notice">لا يُنشر السجل قبل إدخال نوع المنشأة، والعنوان التفصيلي، ورقم التواصل، وساعات العمل، ورابط خرائط Google. تُضاف المواقع الرسمية وواتساب عند توفرهما من مصدر موثوق.</div>
+<details class="suggestBox"><summary>أضف منشأة أو استكمل بيانات منشأة موجودة</summary>
+<form id="suggestForm">
+<div class="suggestGrid">
+<label>السجل المرتبط (اختياري)<select id="suggest_listing" name="listing_id"><option value="">منشأة جديدة</option></select></label>
+<label>اسم المنشأة *<input id="suggest_name" name="name_ar" required maxlength="160"></label>
+<label>الدليل<select id="suggest_category" name="category_id"><option value="">اختر الدليل</option></select></label>
+<label>نوع المنشأة<input id="suggest_type" name="facility_type_ar" placeholder="مستشفى، مركز صحي، متجر..."></label>
+<label>الولاية *<select id="suggest_state" name="state_ar" required><option value="">اختر الولاية</option></select></label>
+<label>المحلية / المدينة<input id="suggest_locality" name="locality_ar"></label>
+<label>العنوان التفصيلي<input id="suggest_address" name="address_ar"></label>
+<label>رقم الهاتف<input name="phone_public" type="tel"></label>
+<label>رقم واتساب<input name="whatsapp_public" type="tel"></label>
+<label>الموقع الإلكتروني<input name="website_url" type="url" placeholder="https://"></label>
+<label>ساعات العمل<input name="working_hours" placeholder="مثال: يوميًا 8 صباحًا–4 مساءً أو 24 ساعة"></label>
+<label>رابط Google Maps<input name="map_url" type="url" placeholder="https://maps.google.com/..."></label>
+<label>حالة التشغيل<select name="operating_status"><option value="unknown">غير مؤكدة</option><option value="open">تعمل</option><option value="temporarily_closed">مغلقة مؤقتًا</option><option value="closed">مغلقة</option></select></label>
+<label>مصدر المعلومات<input name="source_url" type="url" placeholder="رابط مصدر موثوق"></label>
+<label>اسم المرسل (اختياري)<input name="submitter_name"></label>
+<label>وسيلة تواصل للمتابعة (اختياري)<input name="submitter_contact"></label>
+<label class="suggestHoneypot">Website<input name="website_trap" tabindex="-1" autocomplete="off"></label>
+</div>
+<button type="submit">إرسال للمراجعة</button>
+<p id="suggestNotice" class="suggestNotice" aria-live="polite">تصل التحديثات للمراجعة قبل إضافتها إلى الدليل.</p>
+</form></details>
+<div class="notice">يمكن إرسال التفاصيل الناقصة من نموذج الإضافة أو التحديث. لن تظهر التغييرات في الدليل حتى تُراجع.</div>
 </main><footer>© <span id="year"></span> دليل السودان الشامل | بصمة النوابغ</footer>
 <script>
 const BASE='https://ajcioetohfbrgaihbncv.supabase.co/rest/v1/';
 const KEY='sb_publishable_Zs8iWbXjSnK6Q91SUq6R-A_-gpl0nBt';
 const states=['الخرطوم','البحر الأحمر','الجزيرة','كسلا','القضارف','نهر النيل','الشمالية','سنار','النيل الأبيض','النيل الأزرق','شمال كردفان','جنوب كردفان','غرب كردفان','شمال دارفور','جنوب دارفور','شرق دارفور','وسط دارفور','غرب دارفور'];
 const el=id=>document.getElementById(id);let categories=[],listings=[];
+function fillSuggestionLists(){
+const categorySelect=el('suggest_category'),stateSelect=el('suggest_state'),listingSelect=el('suggest_listing');
+if(!categorySelect)return;
+categorySelect.innerHTML='<option value="">اختر الدليل</option>'+categories.map(c=>'<option value="'+c.id+'">'+escapeHTML(c.icon+' '+c.name_ar)+'</option>').join('');
+stateSelect.innerHTML='<option value="">اختر الولاية</option>'+states.map(s=>'<option value="'+escapeHTML(s)+'">'+escapeHTML(s)+'</option>').join('');
+listingSelect.innerHTML='<option value="">منشأة جديدة</option>'+listings.map(x=>'<option value="'+x.id+'">'+escapeHTML(x.name_ar+' — '+(x.locality_ar||x.state_ar))+'</option>').join('');
+listingSelect.onchange=()=>{const x=listings.find(v=>String(v.id)===listingSelect.value);if(!x)return;
+el('suggest_name').value=x.name_ar||'';categorySelect.value=x.category_id||'';
+el('suggest_type').value=x.facility_type_ar||'';stateSelect.value=x.state_ar||'';
+el('suggest_locality').value=x.locality_ar||'';el('suggest_address').value=x.address_ar||'';
+};
+}
+
 function escapeHTML(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function url(v){try{const u=new URL(v);return /^https?:$/.test(u.protocol)?u.href:null}catch{return null}}
 async function query(path){const response=await fetch(BASE+path,{headers:{apikey:KEY,Accept:'application/json'}});if(!response.ok)throw new Error('تعذر تحميل البيانات');return response.json()}
@@ -56,8 +93,22 @@ try{
 categories=await query('sd_categories?select=id,name_ar,icon,sort_order&order=sort_order.asc');
 el('category').innerHTML='<option value="">جميع الأدلة</option>'+categories.map(c=>'<option value="'+c.id+'">'+escapeHTML(c.icon+' '+c.name_ar)+'</option>').join('');
 listings=await query('sd_listings?select=id,name_ar,name_en,category_id,facility_type_ar,state_ar,city_ar,locality_ar,district_ar,street_ar,address_ar,description_ar,latitude,longitude,map_url,phone_public,whatsapp_public,website_url,working_hours,verified_at,verification_level,operating_status&publication_status=eq.published&order=created_at.desc&limit=1000');
+fillSuggestionLists();
 render();
 }catch(e){el('count').textContent='تعذر تحميل الدليل';el('results').innerHTML='<div class="empty">'+escapeHTML(e.message)+'</div>'}
 }
+document.addEventListener('submit',async e=>{
+if(e.target.id!=='suggestForm')return;
+e.preventDefault();const form=e.target,fd=new FormData(form),note=el('suggestNotice');
+if(fd.get('website_trap')){note.textContent='تم استلام الاقتراح للمراجعة.';form.reset();return;}
+const payload={};['name_ar','facility_type_ar','state_ar','locality_ar','address_ar','phone_public','whatsapp_public','website_url','working_hours','map_url','source_url','submitter_name','submitter_contact'].forEach(k=>payload[k]=(fd.get(k)||'').toString().trim()||null);
+payload.category_id=fd.get('category_id')?Number(fd.get('category_id')):null;
+payload.listing_id=fd.get('listing_id')?Number(fd.get('listing_id')):null;
+payload.operating_status=fd.get('operating_status')||'unknown';payload.status='pending';
+note.textContent='جارٍ إرسال التحديث...';
+try{const response=await fetch(BASE+'sd_listing_suggestions',{method:'POST',headers:{apikey:KEY,Authorization:'Bearer '+KEY,'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify(payload)});
+if(!response.ok)throw new Error('تعذر إرسال التحديث');form.reset();fillSuggestionLists();note.textContent='وصل التحديث للمراجعة. شكرًا لمساعدتك في تحسين الدليل.';
+}catch(err){note.textContent=err.message||'تعذر إرسال التحديث الآن.';}
+});
 ['query','category','state'].forEach(id=>el(id).addEventListener(id==='query'?'input':'change',render));init();
 </script></body></html>
