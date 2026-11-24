@@ -107,7 +107,7 @@ const statusLine=status?'<div class="sub">'+tr('status')+' '+escapeHTML(status)+
 const hours=x.working_hours?'<div class="sub">'+tr('hours')+' '+escapeHTML(x.working_hours)+'</div>':'';
 const phoneDigits=String(x.phone_public||'').replace(/[٠-٩۰-۹]/g,d=>String('٠١٢٣٤٥٦٧٨٩'.indexOf(d)>=0?'٠١٢٣٤٥٦٧٨٩'.indexOf(d):'۰۱۲۳۴۵۶۷۸۹'.indexOf(d))).replace(/[^\d+]/g,'');
 const phone=x.phone_public?'<a class="contactLink" href="tel:'+encodeURIComponent(phoneDigits)+'">☎ '+tr('call')+' · '+escapeHTML(x.phone_public)+'</a>':'';
-const whatsappNumber=String(x.whatsapp_public||'').replace(/[٠-٩۰-۹]/g,d=>String('٠١٢٣٤٥٦٧٨٩'.indexOf(d)>=0?'٠١٢٣٤٥٦٧٨٩'.indexOf(d):'۰۱۲۳۴۵۶۷۸۹'.indexOf(d))).replace(/\\D/g,'');
+const whatsappNumber=String(x.whatsapp_public||'').replace(/[٠-٩۰-۹]/g,d=>String('٠١٢٣٤٥٦٧٨٩'.indexOf(d)>=0?'٠١٢٣٤٥٦٧٨٩'.indexOf(d):'۰۱۲۳۴۵۶۷۸۹'.indexOf(d))).replace(/\D/g,'');
 const whatsapp=whatsappNumber?'<a class="contactLink" href="https://wa.me/'+encodeURIComponent(whatsappNumber)+'" target="_blank" rel="noopener noreferrer">◉ '+tr('whatsapp')+' · '+escapeHTML(x.whatsapp_public)+'</a>':'';
 const website=url(x.website_url);
 const coords=x.latitude!==null&&x.longitude!==null;
@@ -132,7 +132,7 @@ e.preventDefault();const form=e.target,fd=new FormData(form),note=el('suggestNot
 if(fd.get('website_trap')){note.textContent=tr('received');form.reset();return;}
 const payload={};['name_ar','name_en','facility_type_ar','state_ar','locality_ar','locality_en','address_ar','phone_public','whatsapp_public','website_url','working_hours','map_url','source_url','submitter_name','submitter_contact','image_url','image_credit','image_source_url'].forEach(k=>payload[k]=(fd.get(k)||'').toString().trim()||null);
 const digitsOnly=v=>String(v||'').replace(/[٠-٩۰-۹]/g,d=>String('٠١٢٣٤٥٦٧٨٩'.indexOf(d)>=0?'٠١٢٣٤٥٦٧٨٩'.indexOf(d):'۰۱۲۳۴۵۶۷۸۹'.indexOf(d))).replace(/\D/g,'');
-if(!payload.listing_id&&!payload.phone_public&&!payload.whatsapp_public){note.textContent=language==='en'?'Please add a phone number or WhatsApp number for a new listing.':'أضف رقم الهاتف أو الواتساب للمنشأة الجديدة.';return;}
+if(!fd.get('listing_id')&&!payload.phone_public&&!payload.whatsapp_public){note.textContent=language==='en'?'Please add a phone number or WhatsApp number for a new listing.':'أضف رقم الهاتف أو الواتساب للمنشأة الجديدة.';return;}
 if((payload.phone_public&&!digitsOnly(payload.phone_public))||(payload.whatsapp_public&&!digitsOnly(payload.whatsapp_public))){note.textContent=language==='en'?'Enter a valid phone or WhatsApp number.':'يرجى إدخال رقم هاتف أو واتساب صحيح.';return;}
 payload.category_id=fd.get('category_id')?Number(fd.get('category_id')):null;
 payload.listing_id=fd.get('listing_id')?Number(fd.get('listing_id')):null;
