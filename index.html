@@ -72,7 +72,7 @@ el('suggest_name').value=x.name_ar||'';categorySelect.value=x.category_id||'';
 el('suggest_type').value=x.facility_type_ar||'';stateSelect.value=x.state_ar||'';
 el('suggest_locality').value=x.locality_ar||'';el('suggest_address').value=x.address_ar||'';
 formValue('phone_public',x.phone_public);formValue('whatsapp_public',x.whatsapp_public);formValue('website_url',x.website_url);formValue('working_hours',x.working_hours);formValue('map_url',x.map_url);formValue('source_url',x.source_url);
-form.querySelector('[name="operating_status"]').value=x.operating_status||'unknown';
+document.querySelector('#suggestForm [name="operating_status"]').value=x.operating_status||'unknown';
 };
 }
 
