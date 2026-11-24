@@ -31,7 +31,7 @@
 <label><span data-ar="المحلية / المدينة بالعربية" data-en="Locality / City in Arabic">المحلية / المدينة بالعربية</span><input id="suggest_locality" name="locality_ar"></label>
 <label><span data-ar="المحلية / المدينة بالإنجليزية (اختياري)" data-en="Locality / City in English (optional)">المحلية / المدينة بالإنجليزية (اختياري)</span><input id="suggest_locality_en" name="locality_en"></label>
 <label><span data-ar="العنوان التفصيلي" data-en="Full address">العنوان التفصيلي</span><input id="suggest_address" name="address_ar"></label>
-<p class="contactHelp" id="contactImportance">الهاتف وواتساب مهمان: أضف واحدًا منهما على الأقل عند تسجيل منشأة جديدة.</p>
+<p class="contactHelp" id="contactImportance" data-ar="الهاتف والواتساب مهمان. أضف رقمًا واحدًا على الأقل للمنشأة الجديدة، وأكمل الرقمين إن توفرا." data-en="Phone and WhatsApp are important. Add at least one number for a new listing, and provide both when available.">الهاتف والواتساب مهمان. أضف رقمًا واحدًا على الأقل للمنشأة الجديدة، وأكمل الرقمين إن توفرا.</p>
 <label><span data-ar="رقم الهاتف (مهم)" data-en="Phone number (important)">رقم الهاتف (مهم)</span><input name="phone_public" type="tel" autocomplete="tel"></label>
 <label><span data-ar="رقم واتساب (مهم)" data-en="WhatsApp number (important)">رقم واتساب (مهم)</span><input name="whatsapp_public" type="tel" autocomplete="tel"></label>
 <label><span data-ar="الموقع الإلكتروني" data-en="Website">الموقع الإلكتروني</span><input name="website_url" type="url" placeholder="https://"></label>
@@ -76,10 +76,10 @@ categorySelect.innerHTML='<option value="">'+(language==='en'?'Choose a director
 stateSelect.innerHTML='<option value="">اختر الولاية</option>'+states.map(([ar,en])=>'<option value="'+escapeHTML(ar)+'">'+escapeHTML(language==='en'?en:ar)+'</option>').join('');
 listingSelect.innerHTML='<option value="">'+(language==='en'?'New listing':'منشأة جديدة')+'</option>'+listings.map(x=>'<option value="'+x.id+'">'+escapeHTML((language==='en'?englishListingName(x):x.name_ar)+' — '+(language==='en'?(states.find(s=>s[0]===x.state_ar)?.[1]||englishLocality(x.locality_ar||x.state_ar)):(x.locality_ar||x.state_ar)))+'</option>').join('');
 listingSelect.onchange=()=>{const x=listings.find(v=>String(v.id)===listingSelect.value);if(!x)return;
-el('suggest_name').value=x.name_ar||'';categorySelect.value=x.category_id||'';
+el('suggest_name').value=x.name_ar||'';formValue('name_en',x.name_en);categorySelect.value=x.category_id||'';
 el('suggest_type').value=x.facility_type_ar||'';stateSelect.value=x.state_ar||'';
-el('suggest_locality').value=x.locality_ar||'';el('suggest_address').value=x.address_ar||'';
-formValue('phone_public',x.phone_public);formValue('whatsapp_public',x.whatsapp_public);formValue('website_url',x.website_url);formValue('working_hours',x.working_hours);formValue('map_url',x.map_url);formValue('source_url',x.source_url);
+el('suggest_locality').value=x.locality_ar||'';formValue('locality_en',x.locality_en);el('suggest_address').value=x.address_ar||'';
+formValue('phone_public',x.phone_public);formValue('whatsapp_public',x.whatsapp_public);formValue('image_url',x.image_url);formValue('image_credit',x.image_credit);formValue('image_source_url',x.image_source_url);formValue('website_url',x.website_url);formValue('working_hours',x.working_hours);formValue('map_url',x.map_url);formValue('source_url',x.source_url);
 document.querySelector('#suggestForm [name="operating_status"]').value=x.operating_status||'unknown';
 };
 }
@@ -105,9 +105,10 @@ const facilityType=x.facility_type_ar?(language==='en'?englishFacilityType(x.fac
 const status=x.operating_status==='open'?tr('open'):x.operating_status==='temporarily_closed'?tr('temporary'):x.operating_status==='closed'?tr('closed'):'';
 const statusLine=status?'<div class="sub">'+tr('status')+' '+escapeHTML(status)+'</div>':'';
 const hours=x.working_hours?'<div class="sub">'+tr('hours')+' '+escapeHTML(x.working_hours)+'</div>':'';
-const phone=x.phone_public?'<a href="tel:'+encodeURIComponent(x.phone_public)+'">'+tr('call')+'</a>':'';
-const whatsappNumber=String(x.whatsapp_public||'').replace(/[^\\d]/g,'');
-const whatsapp=whatsappNumber?'<a href="https://wa.me/'+encodeURIComponent(whatsappNumber)+'" target="_blank" rel="noopener noreferrer">'+tr('whatsapp')+'</a>':'';
+const phoneDigits=String(x.phone_public||'').replace(/[٠-٩۰-۹]/g,d=>String('٠١٢٣٤٥٦٧٨٩'.indexOf(d)>=0?'٠١٢٣٤٥٦٧٨٩'.indexOf(d):'۰۱۲۳۴۵۶۷۸۹'.indexOf(d))).replace(/[^\d+]/g,'');
+const phone=x.phone_public?'<a class="contactLink" href="tel:'+encodeURIComponent(phoneDigits)+'">☎ '+tr('call')+' · '+escapeHTML(x.phone_public)+'</a>':'';
+const whatsappNumber=String(x.whatsapp_public||'').replace(/[٠-٩۰-۹]/g,d=>String('٠١٢٣٤٥٦٧٨٩'.indexOf(d)>=0?'٠١٢٣٤٥٦٧٨٩'.indexOf(d):'۰۱۲۳۴۵۶۷۸۹'.indexOf(d))).replace(/\\D/g,'');
+const whatsapp=whatsappNumber?'<a class="contactLink" href="https://wa.me/'+encodeURIComponent(whatsappNumber)+'" target="_blank" rel="noopener noreferrer">◉ '+tr('whatsapp')+' · '+escapeHTML(x.whatsapp_public)+'</a>':'';
 const website=url(x.website_url);
 const coords=x.latitude!==null&&x.longitude!==null;
 const googleMap=url(x.map_url)||(coords?'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(x.latitude+','+x.longitude):null);
@@ -120,7 +121,7 @@ el('state').innerHTML='<option value="">'+(language==='en'?'All states':'جمي�
 try{
 categories=await query('sd_categories?select=id,name_ar,name_en,icon,sort_order&order=sort_order.asc');
 el('category').innerHTML='<option value="">'+(language==='en'?'All directories':'جميع الأدلة')+'</option>'+categories.map(c=>'<option value="'+c.id+'">'+escapeHTML(c.icon+' '+(language==='en'?(c.name_en||c.name_ar):c.name_ar))+'</option>').join('');
-listings=await query('sd_listings?select=id,name_ar,name_en,category_id,facility_type_ar,state_ar,city_ar,locality_ar,district_ar,street_ar,address_ar,description_ar,latitude,longitude,map_url,phone_public,whatsapp_public,website_url,working_hours,source_url,verified_at,verification_level,operating_status&publication_status=eq.published&order=created_at.desc&limit=1000');
+listings=await query('sd_listings?select=id,name_ar,name_en,category_id,facility_type_ar,state_ar,city_ar,locality_ar,locality_en,district_ar,street_ar,address_ar,description_ar,latitude,longitude,map_url,phone_public,whatsapp_public,website_url,working_hours,image_url,image_credit,image_source_url,source_url,verified_at,verification_level,operating_status&publication_status=eq.published&order=created_at.desc&limit=1000');
 fillSuggestionLists();
 render();
 }catch(e){el('count').textContent=tr('loadError');el('results').innerHTML='<div class="empty">'+escapeHTML(e.message)+'</div>'}
@@ -129,7 +130,10 @@ document.addEventListener('submit',async e=>{
 if(e.target.id!=='suggestForm')return;
 e.preventDefault();const form=e.target,fd=new FormData(form),note=el('suggestNotice');
 if(fd.get('website_trap')){note.textContent=tr('received');form.reset();return;}
-const payload={};['name_ar','facility_type_ar','state_ar','locality_ar','address_ar','phone_public','whatsapp_public','website_url','working_hours','map_url','source_url','submitter_name','submitter_contact'].forEach(k=>payload[k]=(fd.get(k)||'').toString().trim()||null);
+const payload={};['name_ar','name_en','facility_type_ar','state_ar','locality_ar','locality_en','address_ar','phone_public','whatsapp_public','website_url','working_hours','map_url','source_url','submitter_name','submitter_contact','image_url','image_credit','image_source_url'].forEach(k=>payload[k]=(fd.get(k)||'').toString().trim()||null);
+const digitsOnly=v=>String(v||'').replace(/[٠-٩۰-۹]/g,d=>String('٠١٢٣٤٥٦٧٨٩'.indexOf(d)>=0?'٠١٢٣٤٥٦٧٨٩'.indexOf(d):'۰۱۲۳۴۵۶۷۸۹'.indexOf(d))).replace(/\D/g,'');
+if(!payload.listing_id&&!payload.phone_public&&!payload.whatsapp_public){note.textContent=language==='en'?'Please add a phone number or WhatsApp number for a new listing.':'أضف رقم الهاتف أو الواتساب للمنشأة الجديدة.';return;}
+if((payload.phone_public&&!digitsOnly(payload.phone_public))||(payload.whatsapp_public&&!digitsOnly(payload.whatsapp_public))){note.textContent=language==='en'?'Enter a valid phone or WhatsApp number.':'يرجى إدخال رقم هاتف أو واتساب صحيح.';return;}
 payload.category_id=fd.get('category_id')?Number(fd.get('category_id')):null;
 payload.listing_id=fd.get('listing_id')?Number(fd.get('listing_id')):null;
 payload.operating_status=fd.get('operating_status')||'unknown';payload.status='pending';
