@@ -35,12 +35,17 @@ const rows=listings.filter(x=>(!cat||String(x.category_id)===cat)&&(!st||x.state
 el('count').textContent='الأنشطة المطابقة: '+rows.length;
 el('results').innerHTML=rows.length?rows.map(x=>{
 const category=categories.find(c=>c.id===x.category_id);
-const addr=[x.state_ar,x.city_ar,x.locality_ar,x.district_ar,x.street_ar].filter(Boolean).join('، ');
-const level=x.verification_level==='owner_verified'?'موثق بواسطة صاحب النشاط':x.verification_level==='source_checked'?'تمت مراجعة المصدر':'غير متحقق';
-const status=x.operating_status==='open'?'معلن أنه يعمل':x.operating_status==='temporarily_closed'?'مغلق مؤقتًا':x.operating_status==='closed'?'مغلق':'حالة التشغيل غير مؤكدة';
+const addr=[x.state_ar,x.city_ar,x.locality_ar,x.district_ar,x.street_ar,x.address_ar].filter(Boolean).join('، ');
+const facilityType=x.facility_type_ar||'';
+const status=x.operating_status==='open'?'يعمل':x.operating_status==='temporarily_closed'?'مغلق مؤقتًا':x.operating_status==='closed'?'مغلق':'';
+const statusLine=status?'<div class="sub">حالة التشغيل: '+escapeHTML(status)+'</div>':'';
+const hours=x.working_hours?'<div class="sub">ساعات العمل: '+escapeHTML(x.working_hours)+'</div>':'';
+const phone=x.phone_public?'<a href="tel:'+encodeURIComponent(x.phone_public)+'">اتصال</a>':'';
+const whatsappNumber=String(x.whatsapp_public||'').replace(/[^\\d]/g,'');
+const whatsapp=whatsappNumber?'<a href="https://wa.me/'+encodeURIComponent(whatsappNumber)+'" target="_blank" rel="noopener noreferrer">واتساب</a>':'';
 const website=url(x.website_url);
 const coords=x.latitude!==null&&x.longitude!==null;
-return '<article class="card"><span class="tag">'+escapeHTML((category?.icon||'📍')+' '+(category?.name_ar||'نشاط'))+'</span><h2>'+escapeHTML(x.name_ar)+'</h2><div class="sub">'+escapeHTML(addr||'العنوان التفصيلي غير متوفر')+'</div><div class="sub">'+escapeHTML(level)+' · '+escapeHTML(status)+'</div><div class="sub">آخر تحقق: '+escapeHTML(x.verified_at?new Date(x.verified_at).toLocaleDateString('ar-SD'):'غير متوفر')+'</div><div class="links">'+(x.phone_public?'<a href="tel:'+encodeURIComponent(x.phone_public)+'">اتصال</a>':'')+(website?'<a href="'+escapeHTML(website)+'" rel="noopener noreferrer" target="_blank">الموقع الرسمي</a>':'')+(coords?'<a href="https://www.openstreetmap.org/?mlat='+encodeURIComponent(x.latitude)+'&mlon='+encodeURIComponent(x.longitude)+'#map=15/'+encodeURIComponent(x.latitude)+'/'+encodeURIComponent(x.longitude)+'" target="_blank" rel="noopener noreferrer">الخريطة</a>':'')+'</div></article>'
+return '<article class="card"><span class="tag">'+escapeHTML((category?.icon||'📍')+' '+(category?.name_ar||'نشاط'))+'</span><h2>'+escapeHTML(x.name_ar)+'</h2>'+(facilityType?'<div class="sub"><strong>نوع المنشأة:</strong> '+escapeHTML(facilityType)+'</div>':'')+'<div class="sub">'+escapeHTML(addr||'العنوان التفصيلي غير متوفر')+'</div>'+statusLine+hours+'<div class="links">'+phone+whatsapp+(website?'<a href="'+escapeHTML(website)+'" rel="noopener noreferrer" target="_blank">الموقع الرسمي</a>':'')+(coords?'<a href="https://www.openstreetmap.org/?mlat='+encodeURIComponent(x.latitude)+'&mlon='+encodeURIComponent(x.longitude)+'#map=15/'+encodeURIComponent(x.latitude)+'/'+encodeURIComponent(x.longitude)+'" target="_blank" rel="noopener noreferrer">الخريطة</a>':'')+'</div></article>'
 }).join(''):'<div class="empty">لا توجد أنشطة منشورة تطابق البحث حاليًا. ستظهر السجلات بعد إدخالها والتحقق منها.</div>';
 }
 async function init(){
@@ -49,7 +54,7 @@ el('state').innerHTML='<option value="">جميع الولايات</option>'+stat
 try{
 categories=await query('sd_categories?select=id,name_ar,icon,sort_order&order=sort_order.asc');
 el('category').innerHTML='<option value="">جميع الأدلة</option>'+categories.map(c=>'<option value="'+c.id+'">'+escapeHTML(c.icon+' '+c.name_ar)+'</option>').join('');
-listings=await query('sd_listings?select=id,name_ar,name_en,category_id,state_ar,city_ar,locality_ar,district_ar,street_ar,address_ar,description_ar,latitude,longitude,phone_public,website_url,verified_at,verification_level,operating_status&publication_status=eq.published&order=created_at.desc&limit=1000');
+listings=await query('sd_listings?select=id,name_ar,name_en,category_id,facility_type_ar,state_ar,city_ar,locality_ar,district_ar,street_ar,address_ar,description_ar,latitude,longitude,phone_public,whatsapp_public,website_url,working_hours,verified_at,verification_level,operating_status&publication_status=eq.published&order=created_at.desc&limit=1000');
 render();
 }catch(e){el('count').textContent='تعذر تحميل الدليل';el('results').innerHTML='<div class="empty">'+escapeHTML(e.message)+'</div>'}
 }
