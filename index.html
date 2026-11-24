@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>دليل السودان الشامل | Sudan National Directory</title>
+<meta name="description" content="دليل السودان الشامل للأنشطة التجارية والصحية والتعليمية والخدمات في جميع الولايات السودانية">
+<style>
+:root{font-family:Tahoma,Arial,sans-serif;color:#1d3d31;background:#f5f8f4}*{box-sizing:border-box}body{margin:0}a{color:inherit}header{color:white;background:linear-gradient(120deg,#086d48,#2c9666);padding:26px 20px 75px}nav{max-width:1120px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:14px}nav strong{font-size:21px}.hero{text-align:center;margin:65px auto 0;max-width:800px}.hero h1{font-size:clamp(30px,4.5vw,49px);margin:0 0 15px}.hero p{line-height:1.9;color:#e5f9ed}.container{max-width:1120px;margin:-38px auto 30px;padding:0 18px}.filters{padding:20px;background:white;border-radius:18px;box-shadow:0 12px 40px #0002;display:grid;grid-template-columns:2fr 1fr 1fr;gap:12px}input,select{font:inherit;padding:15px 12px;width:100%;border:1px solid #cfdfd4;border-radius:11px;background:white;color:#244534}input:focus,select:focus{outline:2px solid #39a06d}.heading{display:flex;justify-content:space-between;gap:16px;align-items:center;margin:30px 0 18px}.heading p{color:#6a7d6e;font-size:13px}.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:15px}.card{background:white;border:1px solid #e0eae2;border-radius:16px;padding:20px;min-height:184px}.card h2{font-size:20px;margin:12px 0}.tag{background:#e5f6e9;border-radius:20px;color:#087248;padding:5px 10px;font-size:12px}.sub{font-size:14px;line-height:1.8;color:#66786c}.links{display:flex;gap:15px;flex-wrap:wrap;margin-top:15px}.links a{text-decoration:none;color:#087348;font-weight:700}.empty{text-align:center;grid-column:1/-1;background:#fff;padding:55px 18px;border-radius:16px;color:#617365}.notice{border:1px solid #f6d9aa;background:#fff7ea;padding:17px;border-radius:12px;margin:23px 0;color:#694b2d;font-size:14px;line-height:1.8}footer{padding:24px;text-align:center;color:#65736a;font-size:13px}@media(max-width:700px){.filters{grid-template-columns:1fr}.heading{display:block}.hero{margin-top:48px}nav{flex-wrap:wrap}}
+</style>
+</head>
+<body>
+<header><nav><strong>🇸🇩 دليل السودان الشامل</strong><span>Sudan National Directory</span></nav>
+<div class="hero"><h1>كل السودان في دليل واحد</h1><p>ابحث مجانًا عن الشركات والمحلات والمستشفيات والمدارس والخدمات والأماكن العامة في كل ولايات السودان</p></div></header>
+<main class="container">
+<section class="filters" aria-label="البحث والتصفية">
+<input type="search" id="query" placeholder="ابحث عن نشاط أو مكان أو مدينة..." aria-label="بحث">
+<select id="category" aria-label="التصنيف"><option value="">جميع الأدلة</option></select>
+<select id="state" aria-label="الولاية"><option value="">جميع الولايات</option></select>
+</section>
+<div class="heading"><strong id="count">تحميل بيانات الدليل...</strong><p>تظهر حالة التوثيق وتاريخ التحقق لكل سجل</p></div>
+<section id="results" class="cards" aria-live="polite"></section>
+<div class="notice">تُعرض المعلومات المتاحة فقط، ولا تعتبر حالة التشغيل أو العنوان مؤكدين إلا بعد التحقق. بوابة تسجيل الأنشطة ومراجعتها قيد الإعداد.</div>
+</main><footer>© <span id="year"></span> دليل السودان الشامل | بصمة النوابغ</footer>
+<script>
+const BASE='https://ajcioetohfbrgaihbncv.supabase.co/rest/v1/';
+const KEY='sb_publishable_Zs8iWbXjSnK6Q91SUq6R-A_-gpl0nBt';
+const states=['الخرطوم','البحر الأحمر','الجزيرة','كسلا','القضارف','نهر النيل','الشمالية','سنار','النيل الأبيض','النيل الأزرق','شمال كردفان','جنوب كردفان','غرب كردفان','شمال دارفور','جنوب دارفور','شرق دارفور','وسط دارفور','غرب دارفور'];
+const el=id=>document.getElementById(id);let categories=[],listings=[];
+function escapeHTML(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function url(v){try{const u=new URL(v);return /^https?:$/.test(u.protocol)?u.href:null}catch{return null}}
+async function query(path){const response=await fetch(BASE+path,{headers:{apikey:KEY,Accept:'application/json'}});if(!response.ok)throw new Error('تعذر تحميل البيانات');return response.json()}
+function render(){
+const term=el('query').value.trim().toLocaleLowerCase('ar'),cat=el('category').value,st=el('state').value;
+const rows=listings.filter(x=>(!cat||String(x.category_id)===cat)&&(!st||x.state_ar===st)&&(!term||[x.name_ar,x.name_en,x.state_ar,x.city_ar,x.locality_ar,x.district_ar,x.description_ar,x.address_ar].some(v=>String(v??'').toLocaleLowerCase('ar').includes(term))));
+el('count').textContent='الأنشطة المطابقة: '+rows.length;
+el('results').innerHTML=rows.length?rows.map(x=>{
+const category=categories.find(c=>c.id===x.category_id);
+const addr=[x.state_ar,x.city_ar,x.locality_ar,x.district_ar,x.street_ar].filter(Boolean).join('، ');
+const level=x.verification_level==='owner_verified'?'موثق بواسطة صاحب النشاط':x.verification_level==='source_checked'?'تمت مراجعة المصدر':'غير متحقق';
+const status=x.operating_status==='open'?'معلن أنه يعمل':x.operating_status==='temporarily_closed'?'مغلق مؤقتًا':x.operating_status==='closed'?'مغلق':'حالة التشغيل غير مؤكدة';
+const website=url(x.website_url);
+const coords=x.latitude!==null&&x.longitude!==null;
+return '<article class="card"><span class="tag">'+escapeHTML((category?.icon||'📍')+' '+(category?.name_ar||'نشاط'))+'</span><h2>'+escapeHTML(x.name_ar)+'</h2><div class="sub">'+escapeHTML(addr||'العنوان التفصيلي غير متوفر')+'</div><div class="sub">'+escapeHTML(level)+' · '+escapeHTML(status)+'</div><div class="sub">آخر تحقق: '+escapeHTML(x.verified_at?new Date(x.verified_at).toLocaleDateString('ar-SD'):'غير متوفر')+'</div><div class="links">'+(x.phone_public?'<a href="tel:'+encodeURIComponent(x.phone_public)+'">اتصال</a>':'')+(website?'<a href="'+escapeHTML(website)+'" rel="noopener noreferrer" target="_blank">الموقع الرسمي</a>':'')+(coords?'<a href="https://www.openstreetmap.org/?mlat='+encodeURIComponent(x.latitude)+'&mlon='+encodeURIComponent(x.longitude)+'#map=15/'+encodeURIComponent(x.latitude)+'/'+encodeURIComponent(x.longitude)+'" target="_blank" rel="noopener noreferrer">الخريطة</a>':'')+'</div></article>'
+}).join(''):'<div class="empty">لا توجد أنشطة منشورة تطابق البحث حاليًا. ستظهر السجلات بعد إدخالها والتحقق منها.</div>';
+}
+async function init(){
+el('year').textContent=new Date().getFullYear();
+el('state').innerHTML='<option value="">جميع الولايات</option>'+states.map(s=>'<option value="'+escapeHTML(s)+'">'+escapeHTML(s)+'</option>').join('');
+try{
+categories=await query('sd_categories?select=id,name_ar,icon,sort_order&order=sort_order.asc');
+el('category').innerHTML='<option value="">جميع الأدلة</option>'+categories.map(c=>'<option value="'+c.id+'">'+escapeHTML(c.icon+' '+c.name_ar)+'</option>').join('');
+listings=await query('sd_listings?select=id,name_ar,name_en,category_id,state_ar,city_ar,locality_ar,district_ar,street_ar,address_ar,description_ar,latitude,longitude,phone_public,website_url,verified_at,verification_level,operating_status&publication_status=eq.published&order=created_at.desc&limit=1000');
+render();
+}catch(e){el('count').textContent='تعذر تحميل الدليل';el('results').innerHTML='<div class="empty">'+escapeHTML(e.message)+'</div>'}
+}
+['query','category','state'].forEach(id=>el(id).addEventListener(id==='query'?'input':'change',render));init();
+</script></body></html>
