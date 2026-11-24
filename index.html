@@ -9,53 +9,63 @@
 .suggestBox{margin:24px 0;background:#fff;border:1px solid #dce9df;border-radius:16px;padding:18px}.suggestBox summary{cursor:pointer;color:#087348;font-weight:700;font-size:17px}.suggestGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:16px}.suggestGrid label{display:block;font-size:13px;color:#52665a}.suggestGrid input,.suggestGrid select{margin-top:5px}.suggestBox button{margin-top:14px;border:0;border-radius:10px;padding:13px 18px;background:#087348;color:#fff;font:inherit;cursor:pointer}.suggestNotice{font-size:14px;color:#38664f;line-height:1.8}.suggestHoneypot{position:absolute;left:-10000px;opacity:0}@media(max-width:700px){.suggestGrid{grid-template-columns:1fr}}</style>
 </head>
 <body>
-<header><nav><strong>🇸🇩 دليل السودان الشامل</strong><span>Sudan National Directory</span></nav>
-<div class="hero"><h1>كل السودان في دليل واحد</h1><p>ابحث مجانًا عن الشركات والمحلات والمستشفيات والمدارس والخدمات والأماكن العامة في كل ولايات السودان</p></div></header>
+<header><nav><strong id="brand">🇸🇩 دليل السودان الشامل</strong><span>Sudan National Directory</span><button id="languageToggle" type="button" style="border:1px solid #ffffff99;border-radius:10px;background:transparent;color:white;padding:9px 14px;font:inherit;cursor:pointer">English</button></nav>
+<div class="hero"><h1 id="heroTitle">كل السودان في دليل واحد</h1><p id="heroText">ابحث مجانًا عن الشركات والمحلات والمستشفيات والمدارس والمطاعم والخدمات في كل ولايات السودان</p></div></header>
 <main class="container">
 <section class="filters" aria-label="البحث والتصفية">
-<input type="search" id="query" placeholder="ابحث عن نشاط أو مكان أو مدينة..." aria-label="بحث">
-<select id="category" aria-label="التصنيف"><option value="">جميع الأدلة</option></select>
-<select id="state" aria-label="الولاية"><option value="">جميع الولايات</option></select>
+<input type="search" id="query" placeholder="ابحث عن نشاط أو مكان أو مدينة..." aria-label="بحث" data-en-placeholder="Search for a business, place, or city..." data-en-aria="Search">
+<select id="category" aria-label="التصنيف"><option value="" data-ar="جميع الأدلة" data-en="All directories">جميع الأدلة</option></select>
+<select id="state" aria-label="الولاية"><option value="" data-ar="جميع الولايات" data-en="All states">جميع الولايات</option></select>
 </section>
-<div class="heading"><strong id="count">تحميل بيانات الدليل...</strong><p>تظهر في كل نتيجة نوع المنشأة، عنوانها، ساعات العمل، وسائل التواصل، ورابط موقعها على خرائط Google.</p></div>
+<div class="heading"><strong id="count">تحميل بيانات الدليل...</strong><p id="resultHint">تظهر في كل نتيجة نوع المنشأة، عنوانها، ساعات العمل، وسائل التواصل، ورابط موقعها على خرائط Google.</p></div>
 <section id="results" class="cards" aria-live="polite"></section>
-<details class="suggestBox"><summary>أضف منشأة أو استكمل بيانات منشأة موجودة</summary>
+<details class="suggestBox"><summary id="suggestSummary">أضف منشأة أو استكمل بيانات منشأة موجودة</summary>
 <form id="suggestForm">
 <div class="suggestGrid">
-<label>السجل المرتبط (اختياري)<select id="suggest_listing" name="listing_id"><option value="">منشأة جديدة</option></select></label>
-<label>اسم المنشأة *<input id="suggest_name" name="name_ar" required maxlength="160"></label>
-<label>الدليل<select id="suggest_category" name="category_id"><option value="">اختر الدليل</option></select></label>
-<label>نوع المنشأة<input id="suggest_type" name="facility_type_ar" placeholder="مستشفى، مركز صحي، متجر..."></label>
-<label>الولاية *<select id="suggest_state" name="state_ar" required><option value="">اختر الولاية</option></select></label>
-<label>المحلية / المدينة<input id="suggest_locality" name="locality_ar"></label>
-<label>العنوان التفصيلي<input id="suggest_address" name="address_ar"></label>
-<label>رقم الهاتف<input name="phone_public" type="tel"></label>
-<label>رقم واتساب<input name="whatsapp_public" type="tel"></label>
-<label>الموقع الإلكتروني<input name="website_url" type="url" placeholder="https://"></label>
-<label>ساعات العمل<input name="working_hours" placeholder="مثال: يوميًا 8 صباحًا–4 مساءً أو 24 ساعة"></label>
-<label>رابط Google Maps<input name="map_url" type="url" placeholder="https://maps.google.com/..."></label>
-<label>حالة التشغيل<select name="operating_status"><option value="unknown">غير مؤكدة</option><option value="open">تعمل</option><option value="temporarily_closed">مغلقة مؤقتًا</option><option value="closed">مغلقة</option></select></label>
-<label>مصدر المعلومات<input name="source_url" type="url" placeholder="رابط مصدر موثوق"></label>
-<label>اسم المرسل (اختياري)<input name="submitter_name"></label>
-<label>وسيلة تواصل للمتابعة (اختياري)<input name="submitter_contact"></label>
+<label><span data-ar="السجل المرتبط (اختياري)" data-en="Related listing (optional)">السجل المرتبط (اختياري)</span><select id="suggest_listing" name="listing_id"><option value="" data-ar="منشأة جديدة" data-en="New listing">منشأة جديدة</option></select></label>
+<label><span data-ar="اسم المنشأة *" data-en="Business name *">اسم المنشأة *</span><input id="suggest_name" name="name_ar" required maxlength="160"></label>
+<label><span data-ar="الدليل" data-en="Directory">الدليل</span><select id="suggest_category" name="category_id"><option value="" data-ar="اختر الدليل" data-en="Choose a directory">اختر الدليل</option></select></label>
+<label><span data-ar="نوع المنشأة" data-en="Business type">نوع المنشأة</span><input id="suggest_type" name="facility_type_ar" placeholder="مستشفى، مركز صحي، متجر..." data-en-placeholder="Hospital, clinic, restaurant..."></label>
+<label><span data-ar="الولاية *" data-en="State *">الولاية *</span><select id="suggest_state" name="state_ar" required><option value="" data-ar="اختر الولاية" data-en="Choose a state">اختر الولاية</option></select></label>
+<label><span data-ar="المحلية / المدينة" data-en="Locality / City">المحلية / المدينة</span><input id="suggest_locality" name="locality_ar"></label>
+<label><span data-ar="العنوان التفصيلي" data-en="Full address">العنوان التفصيلي</span><input id="suggest_address" name="address_ar"></label>
+<label><span data-ar="رقم الهاتف" data-en="Phone number">رقم الهاتف</span><input name="phone_public" type="tel"></label>
+<label><span data-ar="رقم واتساب" data-en="WhatsApp number">رقم واتساب</span><input name="whatsapp_public" type="tel"></label>
+<label><span data-ar="الموقع الإلكتروني" data-en="Website">الموقع الإلكتروني</span><input name="website_url" type="url" placeholder="https://"></label>
+<label><span data-ar="ساعات العمل" data-en="Opening hours">ساعات العمل</span><input name="working_hours" placeholder="مثال: يوميًا 8 صباحًا–4 مساءً أو 24 ساعة" data-en-placeholder="e.g. Daily 8am–4pm or 24 hours"></label>
+<label><span data-ar="رابط Google Maps" data-en="Google Maps link">رابط Google Maps</span><input name="map_url" type="url" placeholder="https://maps.google.com/..."></label>
+<label><span data-ar="حالة التشغيل" data-en="Operating status">حالة التشغيل</span><select name="operating_status"><option value="unknown" data-ar="غير مؤكدة" data-en="Unconfirmed">غير مؤكدة</option><option value="open" data-ar="تعمل" data-en="Open">تعمل</option><option value="temporarily_closed" data-ar="مغلقة مؤقتًا" data-en="Temporarily closed">مغلقة مؤقتًا</option><option value="closed" data-ar="مغلقة" data-en="Closed">مغلقة</option></select></label>
+<label><span data-ar="مصدر المعلومات" data-en="Information source">مصدر المعلومات</span><input name="source_url" type="url" placeholder="رابط مصدر موثوق" data-en-placeholder="Link to a reliable source"></label>
+<label><span data-ar="اسم المرسل (اختياري)" data-en="Your name (optional)">اسم المرسل (اختياري)</span><input name="submitter_name"></label>
+<label><span data-ar="وسيلة تواصل للمتابعة (اختياري)" data-en="Contact for follow-up (optional)">وسيلة تواصل للمتابعة (اختياري)</span><input name="submitter_contact"></label>
 <label class="suggestHoneypot">Website<input name="website_trap" tabindex="-1" autocomplete="off"></label>
 </div>
-<button type="submit">إرسال للمراجعة</button>
-<p id="suggestNotice" class="suggestNotice" aria-live="polite">تصل التحديثات للمراجعة قبل إضافتها إلى الدليل.</p>
+<button id="submitSuggestion" type="submit">إرسال للمراجعة</button>
+<p id="suggestNotice" class="suggestNotice" aria-live="polite" id="suggestNotice">تصل التحديثات للمراجعة قبل إضافتها إلى الدليل.</p>
 </form></details>
-<div class="notice">يمكن إرسال التفاصيل الناقصة من نموذج الإضافة أو التحديث. لن تظهر التغييرات في الدليل حتى تُراجع.</div>
-</main><footer>© <span id="year"></span> دليل السودان الشامل | بصمة النوابغ</footer>
+<div class="notice" id="reviewNotice">يمكن إرسال التفاصيل الناقصة من نموذج الإضافة أو التحديث. لن تظهر التغييرات في الدليل حتى تُراجع.</div>
+</main><footer>© <span id="year"></span> <span id="footerText">دليل السودان الشامل | بصمة النوابغ</span></footer>
 <script>
 const BASE='https://ajcioetohfbrgaihbncv.supabase.co/rest/v1/';
 const KEY='sb_publishable_Zs8iWbXjSnK6Q91SUq6R-A_-gpl0nBt';
-const states=['الخرطوم','البحر الأحمر','الجزيرة','كسلا','القضارف','نهر النيل','الشمالية','سنار','النيل الأبيض','النيل الأزرق','شمال كردفان','جنوب كردفان','غرب كردفان','شمال دارفور','جنوب دارفور','شرق دارفور','وسط دارفور','غرب دارفور'];
+const states=[["الخرطوم","Khartoum"],["البحر الأحمر","Red Sea"],["الجزيرة","Gezira"],["كسلا","Kassala"],["القضارف","Gedaref"],["نهر النيل","River Nile"],["الشمالية","Northern"],["سنار","Sennar"],["النيل الأبيض","White Nile"],["النيل الأزرق","Blue Nile"],["شمال كردفان","North Kordofan"],["جنوب كردفان","South Kordofan"],["غرب كردفان","West Kordofan"],["شمال دارفور","North Darfur"],["جنوب دارفور","South Darfur"],["شرق دارفور","East Darfur"],["وسط دارفور","Central Darfur"],["غرب دارفور","West Darfur"]];
+let language="ar";
+const translations={count:"Matching listings:",empty:"No published listings match your search yet. Records will appear after they are submitted and reviewed.",unknownAddress:"Detailed address not available",facility:"Facility type:",status:"Operating status:",open:"Open",temporary:"Temporarily closed",closed:"Closed",hours:"Opening hours:",call:"Call",whatsapp:"WhatsApp",website:"Official website",map:"Google Maps",category:"Listing",loading:"Loading directory data...",loadError:"Unable to load directory",submit:"Submitting...",submitDone:"Your update has been submitted for review. Thank you for helping improve the directory.",submitError:"Unable to submit the update right now.",received:"Your suggestion has been received for review."};
+function applyLanguage(){const en=language==="en";document.documentElement.lang=language;document.documentElement.dir=en?"ltr":"rtl";
+el("languageToggle").textContent=en?"العربية":"English";el("brand").textContent=en?"🇸🇩 Sudan National Directory":"🇸🇩 دليل السودان الشامل";el("heroTitle").textContent=en?"All Sudan in One Directory":"كل السودان في دليل واحد";el("heroText").textContent=en?"Search free for businesses, shops, hospitals, schools, restaurants, and services across Sudan.":"ابحث مجانًا عن الشركات والمحلات والمستشفيات والمدارس والمطاعم والخدمات في كل ولايات السودان";el("query").placeholder=en?el("query").dataset.enPlaceholder:"ابحث عن نشاط أو مكان أو مدينة...";el("query").setAttribute("aria-label",en?el("query").dataset.enAria:"بحث");
+el("resultHint").textContent=en?"Each listing may show its type, address, hours, contact details, and Google Maps link.":"تظهر في كل نتيجة نوع المنشأة، عنوانها، ساعات العمل، وسائل التواصل، ورابط موقعها على خرائط Google.";
+el("suggestSummary").textContent=en?"Add a listing or complete an existing listing":"أضف منشأة أو استكمل بيانات منشأة موجودة";el("submitSuggestion").textContent=en?"Submit for review":"إرسال للمراجعة";el("suggestNotice").textContent=en?"Updates are reviewed before they appear in the directory.":"تصل التحديثات للمراجعة قبل إضافتها إلى الدليل.";el("reviewNotice").textContent=en?"You can submit missing details using the form. Changes appear after review.":"يمكن إرسال التفاصيل الناقصة من نموذج الإضافة أو التحديث. لن تظهر التغييرات في الدليل حتى تُراجع.";el("footerText").textContent=en?"Sudan National Directory | Basmat Alnawabigh":"دليل السودان الشامل | بصمة النوابغ";
+document.querySelectorAll("[data-ar][data-en]").forEach(x=>x.textContent=en?x.dataset.en:x.dataset.ar);document.querySelectorAll("[data-en-placeholder]").forEach(x=>x.placeholder=en?x.dataset.enPlaceholder:(x.getAttribute("data-ar-placeholder")||""));document.querySelectorAll("option[data-en]").forEach(x=>x.textContent=en?x.dataset.en:x.dataset.ar);
+const stateOptions=states.map(([ar,eng])=>`<option value="${ar}">${en?eng:ar}</option>`).join("");el("state").innerHTML=`<option value="" data-ar="جميع الولايات" data-en="All states">${en?"All states":"جميع الولايات"}</option>`+stateOptions;el("suggest_state").innerHTML=`<option value="" data-ar="اختر الولاية" data-en="Choose a state">${en?"Choose a state":"اختر الولاية"}</option>`+stateOptions;
+fillSuggestionLists();render();}
+function tr(key){return language==="en"?(translations[key]||key):({count:"الأنشطة المطابقة:",empty:"لا توجد أنشطة منشورة تطابق البحث حاليًا. ستظهر السجلات بعد إدخالها والتحقق منها.",unknownAddress:"العنوان التفصيلي غير متوفر",facility:"نوع المنشأة:",status:"حالة التشغيل:",open:"يعمل",temporary:"مغلق مؤقتًا",closed:"مغلق",hours:"ساعات العمل:",call:"اتصال",whatsapp:"واتساب",website:"الموقع الرسمي",map:"الموقع على Google Maps",category:"نشاط",loading:"تحميل بيانات الدليل...",loadError:"تعذر تحميل الدليل",submit:"جارٍ إرسال التحديث...",submitDone:"وصل التحديث للمراجعة. شكرًا لمساعدتك في تحسين الدليل.",submitError:"تعذر إرسال التحديث الآن.",received:"تم استلام الاقتراح للمراجعة."}[key]||key);}
 const el=id=>document.getElementById(id);let categories=[],listings=[];
 function fillSuggestionLists(){
 const categorySelect=el('suggest_category'),stateSelect=el('suggest_state'),listingSelect=el('suggest_listing');
 if(!categorySelect)return;
-categorySelect.innerHTML='<option value="">اختر الدليل</option>'+categories.map(c=>'<option value="'+c.id+'">'+escapeHTML(c.icon+' '+c.name_ar)+'</option>').join('');
-stateSelect.innerHTML='<option value="">اختر الولاية</option>'+states.map(s=>'<option value="'+escapeHTML(s)+'">'+escapeHTML(s)+'</option>').join('');
-listingSelect.innerHTML='<option value="">منشأة جديدة</option>'+listings.map(x=>'<option value="'+x.id+'">'+escapeHTML(x.name_ar+' — '+(x.locality_ar||x.state_ar))+'</option>').join('');
+categorySelect.innerHTML='<option value="">اختر الدليل</option>'+categories.map(c=>'<option value="'+c.id+'">'+escapeHTML(c.icon+' '+(language==='en'?(c.name_en||c.name_ar):c.name_ar))+'</option>').join('');
+stateSelect.innerHTML='<option value="">اختر الولاية</option>'+states.map(([ar,en])=>'<option value="'+escapeHTML(ar)+'">'+escapeHTML(language==='en'?en:ar)+'</option>').join('');
+listingSelect.innerHTML='<option value="">منشأة جديدة</option>'+listings.map(x=>'<option value="'+x.id+'">'+escapeHTML((language==='en'?(x.name_en||x.name_ar):x.name_ar)+' — '+(language==='en'?(states.find(s=>s[0]===x.state_ar)?.[1]||x.locality_ar||x.state_ar):(x.locality_ar||x.state_ar)))+'</option>').join('');
 listingSelect.onchange=()=>{const x=listings.find(v=>String(v.id)===listingSelect.value);if(!x)return;
 el('suggest_name').value=x.name_ar||'';categorySelect.value=x.category_id||'';
 el('suggest_type').value=x.facility_type_ar||'';stateSelect.value=x.state_ar||'';
@@ -69,46 +79,48 @@ async function query(path){const response=await fetch(BASE+path,{headers:{apikey
 function render(){
 const term=el('query').value.trim().toLocaleLowerCase('ar'),cat=el('category').value,st=el('state').value;
 const rows=listings.filter(x=>(!cat||String(x.category_id)===cat)&&(!st||x.state_ar===st)&&(!term||[x.name_ar,x.name_en,x.state_ar,x.city_ar,x.locality_ar,x.district_ar,x.description_ar,x.address_ar].some(v=>String(v??'').toLocaleLowerCase('ar').includes(term))));
-el('count').textContent='الأنشطة المطابقة: '+rows.length;
+el('count').textContent=tr('count')+' '+rows.length;
 el('results').innerHTML=rows.length?rows.map(x=>{
 const category=categories.find(c=>c.id===x.category_id);
-const addr=[x.state_ar,x.city_ar,x.locality_ar,x.district_ar,x.street_ar,x.address_ar].filter(Boolean).join('، ');
+const addr=(language==='en'?[x.state_en,x.city_en,x.locality_en,x.district_en,x.street_en,x.address_en].filter(Boolean).join(', '):[x.state_ar,x.city_ar,x.locality_ar,x.district_ar,x.street_ar,x.address_ar].filter(Boolean).join('، '));
 const facilityType=x.facility_type_ar||'';
-const status=x.operating_status==='open'?'يعمل':x.operating_status==='temporarily_closed'?'مغلق مؤقتًا':x.operating_status==='closed'?'مغلق':'';
-const statusLine=status?'<div class="sub">حالة التشغيل: '+escapeHTML(status)+'</div>':'';
-const hours=x.working_hours?'<div class="sub">ساعات العمل: '+escapeHTML(x.working_hours)+'</div>':'';
-const phone=x.phone_public?'<a href="tel:'+encodeURIComponent(x.phone_public)+'">اتصال</a>':'';
+const status=x.operating_status==='open'?tr('open'):x.operating_status==='temporarily_closed'?tr('temporary'):x.operating_status==='closed'?tr('closed'):'';
+const statusLine=status?'<div class="sub">'+tr('status')+' '+escapeHTML(status)+'</div>':'';
+const hours=x.working_hours?'<div class="sub">'+tr('hours')+' '+escapeHTML(x.working_hours)+'</div>':'';
+const phone=x.phone_public?'<a href="tel:'+encodeURIComponent(x.phone_public)+'">'+tr('call')+'</a>':'';
 const whatsappNumber=String(x.whatsapp_public||'').replace(/[^\\d]/g,'');
-const whatsapp=whatsappNumber?'<a href="https://wa.me/'+encodeURIComponent(whatsappNumber)+'" target="_blank" rel="noopener noreferrer">واتساب</a>':'';
+const whatsapp=whatsappNumber?'<a href="https://wa.me/'+encodeURIComponent(whatsappNumber)+'" target="_blank" rel="noopener noreferrer">'+tr('whatsapp')+'</a>':'';
 const website=url(x.website_url);
 const coords=x.latitude!==null&&x.longitude!==null;
 const googleMap=url(x.map_url)||(coords?'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(x.latitude+','+x.longitude):null);
-return '<article class="card"><span class="tag">'+escapeHTML((category?.icon||'📍')+' '+(category?.name_ar||'نشاط'))+'</span><h2>'+escapeHTML(x.name_ar)+'</h2>'+(facilityType?'<div class="sub"><strong>نوع المنشأة:</strong> '+escapeHTML(facilityType)+'</div>':'')+'<div class="sub">'+escapeHTML(addr||'العنوان التفصيلي غير متوفر')+'</div>'+statusLine+hours+'<div class="links">'+phone+whatsapp+(website?'<a href="'+escapeHTML(website)+'" rel="noopener noreferrer" target="_blank">الموقع الرسمي</a>':'')+(googleMap?'<a href="'+escapeHTML(googleMap)+'" target="_blank" rel="noopener noreferrer">الموقع على Google Maps</a>':'')+'</div></article>'
-}).join(''):'<div class="empty">لا توجد أنشطة منشورة تطابق البحث حاليًا. ستظهر السجلات بعد إدخالها والتحقق منها.</div>';
+return '<article class="card"><span class="tag">'+escapeHTML((category?.icon||'📍')+' '+(language==='en'?(category?.name_en||category?.name_ar):(category?.name_ar||'نشاط')))+'</span><h2>'+escapeHTML(language==='en'?(x.name_en||x.name_ar):x.name_ar)+'</h2>'+(facilityType?'<div class="sub"><strong>'+tr('facility')+'</strong> '+escapeHTML(facilityType)+'</div>':'')+'<div class="sub">'+escapeHTML(addr||tr('unknownAddress'))+'</div>'+statusLine+hours+'<div class="links">'+phone+whatsapp+(website?'<a href="'+escapeHTML(website)+'" rel="noopener noreferrer" target="_blank">'+tr('website')+'</a>':'')+(googleMap?'<a href="'+escapeHTML(googleMap)+'" target="_blank" rel="noopener noreferrer">'+tr('map')+'</a>':'')+'</div></article>'
+}).join(''):'<div class="empty">'+tr('empty')+'</div>';
 }
 async function init(){
 el('year').textContent=new Date().getFullYear();
-el('state').innerHTML='<option value="">جميع الولايات</option>'+states.map(s=>'<option value="'+escapeHTML(s)+'">'+escapeHTML(s)+'</option>').join('');
+el('state').innerHTML='<option value="">'+(language==='en'?'All states':'جميع الولايات')+'</option>'+states.map(([ar,en])=>'<option value="'+escapeHTML(ar)+'">'+escapeHTML(language==='en'?en:ar)+'</option>').join('');
 try{
-categories=await query('sd_categories?select=id,name_ar,icon,sort_order&order=sort_order.asc');
-el('category').innerHTML='<option value="">جميع الأدلة</option>'+categories.map(c=>'<option value="'+c.id+'">'+escapeHTML(c.icon+' '+c.name_ar)+'</option>').join('');
-listings=await query('sd_listings?select=id,name_ar,name_en,category_id,facility_type_ar,state_ar,city_ar,locality_ar,district_ar,street_ar,address_ar,description_ar,latitude,longitude,map_url,phone_public,whatsapp_public,website_url,working_hours,verified_at,verification_level,operating_status&publication_status=eq.published&order=created_at.desc&limit=1000');
+categories=await query('sd_categories?select=id,name_ar,name_en,icon,sort_order&order=sort_order.asc');
+el('category').innerHTML='<option value="">'+(language==='en'?'All directories':'جميع الأدلة')+'</option>'+categories.map(c=>'<option value="'+c.id+'">'+escapeHTML(c.icon+' '+(language==='en'?(c.name_en||c.name_ar):c.name_ar))+'</option>').join('');
+listings=await query('sd_listings?select=id,name_ar,name_en,category_id,facility_type_ar,facility_type_en,state_ar,state_en,city_ar,city_en,locality_ar,locality_en,district_ar,district_en,street_ar,street_en,address_ar,address_en,description_ar,latitude,longitude,map_url,phone_public,whatsapp_public,website_url,working_hours,verified_at,verification_level,operating_status&publication_status=eq.published&order=created_at.desc&limit=1000');
 fillSuggestionLists();
 render();
-}catch(e){el('count').textContent='تعذر تحميل الدليل';el('results').innerHTML='<div class="empty">'+escapeHTML(e.message)+'</div>'}
+}catch(e){el('count').textContent=tr('loadError');el('results').innerHTML='<div class="empty">'+escapeHTML(e.message)+'</div>'}
 }
 document.addEventListener('submit',async e=>{
 if(e.target.id!=='suggestForm')return;
 e.preventDefault();const form=e.target,fd=new FormData(form),note=el('suggestNotice');
-if(fd.get('website_trap')){note.textContent='تم استلام الاقتراح للمراجعة.';form.reset();return;}
+if(fd.get('website_trap')){note.textContent=tr('received');form.reset();return;}
 const payload={};['name_ar','facility_type_ar','state_ar','locality_ar','address_ar','phone_public','whatsapp_public','website_url','working_hours','map_url','source_url','submitter_name','submitter_contact'].forEach(k=>payload[k]=(fd.get(k)||'').toString().trim()||null);
 payload.category_id=fd.get('category_id')?Number(fd.get('category_id')):null;
 payload.listing_id=fd.get('listing_id')?Number(fd.get('listing_id')):null;
 payload.operating_status=fd.get('operating_status')||'unknown';payload.status='pending';
-note.textContent='جارٍ إرسال التحديث...';
+note.textContent=tr('submit');
 try{const response=await fetch(BASE+'sd_listing_suggestions',{method:'POST',headers:{apikey:KEY,Authorization:'Bearer '+KEY,'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify(payload)});
-if(!response.ok)throw new Error('تعذر إرسال التحديث');form.reset();fillSuggestionLists();note.textContent='وصل التحديث للمراجعة. شكرًا لمساعدتك في تحسين الدليل.';
-}catch(err){note.textContent=err.message||'تعذر إرسال التحديث الآن.';}
+if(!response.ok)throw new Error('تعذر إرسال التحديث');form.reset();fillSuggestionLists();note.textContent=tr('submitDone');
+}catch(err){note.textContent=err.message||tr('submitError');}
 });
-['query','category','state'].forEach(id=>el(id).addEventListener(id==='query'?'input':'change',render));init();
+['query','category','state'].forEach(id=>el(id).addEventListener(id==='query'?'input':'change',render));
+el('languageToggle').addEventListener('click',()=>{language=language==='ar'?'en':'ar';applyLanguage();});
+applyLanguage();init();
 </script></body></html>
