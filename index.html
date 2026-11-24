@@ -45,7 +45,8 @@ const whatsappNumber=String(x.whatsapp_public||'').replace(/[^\\d]/g,'');
 const whatsapp=whatsappNumber?'<a href="https://wa.me/'+encodeURIComponent(whatsappNumber)+'" target="_blank" rel="noopener noreferrer">واتساب</a>':'';
 const website=url(x.website_url);
 const coords=x.latitude!==null&&x.longitude!==null;
-return '<article class="card"><span class="tag">'+escapeHTML((category?.icon||'📍')+' '+(category?.name_ar||'نشاط'))+'</span><h2>'+escapeHTML(x.name_ar)+'</h2>'+(facilityType?'<div class="sub"><strong>نوع المنشأة:</strong> '+escapeHTML(facilityType)+'</div>':'')+'<div class="sub">'+escapeHTML(addr||'العنوان التفصيلي غير متوفر')+'</div>'+statusLine+hours+'<div class="links">'+phone+whatsapp+(website?'<a href="'+escapeHTML(website)+'" rel="noopener noreferrer" target="_blank">الموقع الرسمي</a>':'')+(coords?'<a href="https://www.openstreetmap.org/?mlat='+encodeURIComponent(x.latitude)+'&mlon='+encodeURIComponent(x.longitude)+'#map=15/'+encodeURIComponent(x.latitude)+'/'+encodeURIComponent(x.longitude)+'" target="_blank" rel="noopener noreferrer">الخريطة</a>':'')+'</div></article>'
+const googleMap=url(x.map_url)||(coords?'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(x.latitude+','+x.longitude):null);
+return '<article class="card"><span class="tag">'+escapeHTML((category?.icon||'📍')+' '+(category?.name_ar||'نشاط'))+'</span><h2>'+escapeHTML(x.name_ar)+'</h2>'+(facilityType?'<div class="sub"><strong>نوع المنشأة:</strong> '+escapeHTML(facilityType)+'</div>':'')+'<div class="sub">'+escapeHTML(addr||'العنوان التفصيلي غير متوفر')+'</div>'+statusLine+hours+'<div class="links">'+phone+whatsapp+(website?'<a href="'+escapeHTML(website)+'" rel="noopener noreferrer" target="_blank">الموقع الرسمي</a>':'')+(googleMap?'<a href="'+escapeHTML(googleMap)+'" target="_blank" rel="noopener noreferrer">الموقع على Google Maps</a>':'')+'</div></article>'
 }).join(''):'<div class="empty">لا توجد أنشطة منشورة تطابق البحث حاليًا. ستظهر السجلات بعد إدخالها والتحقق منها.</div>';
 }
 async function init(){
@@ -54,7 +55,7 @@ el('state').innerHTML='<option value="">جميع الولايات</option>'+stat
 try{
 categories=await query('sd_categories?select=id,name_ar,icon,sort_order&order=sort_order.asc');
 el('category').innerHTML='<option value="">جميع الأدلة</option>'+categories.map(c=>'<option value="'+c.id+'">'+escapeHTML(c.icon+' '+c.name_ar)+'</option>').join('');
-listings=await query('sd_listings?select=id,name_ar,name_en,category_id,facility_type_ar,state_ar,city_ar,locality_ar,district_ar,street_ar,address_ar,description_ar,latitude,longitude,phone_public,whatsapp_public,website_url,working_hours,verified_at,verification_level,operating_status&publication_status=eq.published&order=created_at.desc&limit=1000');
+listings=await query('sd_listings?select=id,name_ar,name_en,category_id,facility_type_ar,state_ar,city_ar,locality_ar,district_ar,street_ar,address_ar,description_ar,latitude,longitude,map_url,phone_public,whatsapp_public,website_url,working_hours,verified_at,verification_level,operating_status&publication_status=eq.published&order=created_at.desc&limit=1000');
 render();
 }catch(e){el('count').textContent='تعذر تحميل الدليل';el('results').innerHTML='<div class="empty">'+escapeHTML(e.message)+'</div>'}
 }
