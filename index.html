@@ -103,7 +103,7 @@ const rows=listings.filter(x=>(!cat||String(x.category_id)===cat)&&(!st||x.state
 el('count').textContent=tr('count')+' '+rows.length;
 el('results').innerHTML=rows.length?rows.map(x=>{
 const category=categories.find(c=>c.id===x.category_id);
-const addr=(language==='en'?[states.find(s=>s[0]===x.state_ar)?.[1]||englishPlace(x.state_ar),englishPlace(x.city_ar),englishPlace(x.locality_ar),englishPlace(x.district_ar),englishPlace(x.street_ar),englishPlace(x.address_ar)].filter(Boolean).join(', '):[x.state_ar,x.city_ar,x.locality_ar,x.district_ar,x.street_ar,x.address_ar].filter(Boolean).join('، '));
+const addr=(language==='en'?[states.find(s=>s[0]===x.state_ar)?.[1]||englishPlace(x.state_ar),englishPlace(x.city_ar),englishPlace(x.locality_en||x.locality_ar),englishPlace(x.district_ar),englishPlace(x.street_ar),englishPlace(x.address_ar)].filter(Boolean).join(', '):[x.state_ar,x.city_ar,x.locality_ar,x.district_ar,x.street_ar,x.address_ar].filter(Boolean).join('، '));
 const facilityType=x.facility_type_ar?(language==='en'?englishFacilityType(x.facility_type_ar):x.facility_type_ar):'';
 const status=x.operating_status==='open'?tr('open'):x.operating_status==='temporarily_closed'?tr('temporary'):x.operating_status==='closed'?tr('closed'):tr('operationUnknown');
 const statusLine='<div class="sub">'+tr('status')+' '+escapeHTML(status)+'</div>';
@@ -151,7 +151,7 @@ payload.listing_id=fd.get('listing_id')?Number(fd.get('listing_id')):null;
 payload.operating_status=fd.get('operating_status')||'unknown';payload.status='pending';
 note.textContent=tr('submit');
 try{const response=await fetch(BASE+'sd_listing_suggestions',{method:'POST',headers:{apikey:KEY,Authorization:'Bearer '+KEY,'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify(payload)});
-if(!response.ok)throw new Error('تعذر إرسال التحديث');form.reset();fillSuggestionLists();note.textContent=tr('submitDone');
+if(!response.ok)throw new Error('تعذر إرسال التحديث');form.reset();updatePhotoPreview();fillSuggestionLists();note.textContent=tr('submitDone');
 }catch(err){note.textContent=err.message||tr('submitError');}
 });
 ['query','category','state'].forEach(id=>el(id).addEventListener(id==='query'?'input':'change',render));
