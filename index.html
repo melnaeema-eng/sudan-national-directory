@@ -92,6 +92,7 @@ const knownEnglishNames={"مستشفى أحمد قاسم":"Ahmed Qassem Hospital
 function transliterateArabic(value){let s=String(value||"").replace(/[ًٌٍَُِّْـ]/g,"").replace(/[أإآٱ]/g,"ا").replace(/ى/g,"ي").replace(/ة/g,"ه").replace(/ؤ/g,"و").replace(/ئ/g,"ي").replace(/ء/g,"").replace(/(^|\s)ال/g,"$1Al-").replace(/[٠-٩]/g,d=>"٠١٢٣٤٥٦٧٨٩".indexOf(d));const map={ا:"a",ب:"b",ت:"t",ث:"th",ج:"j",ح:"h",خ:"kh",د:"d",ذ:"dh",ر:"r",ز:"z",س:"s",ش:"sh",ص:"s",ض:"d",ط:"t",ظ:"z",ع:"",غ:"gh",ف:"f",ق:"q",ك:"k",ل:"l",م:"m",ن:"n",ه:"h",و:"w",ي:"y",ء:""};s=[...s].map(ch=>map[ch]??ch).join("").replace(/Al-([a-z])/g,(_,c)=>"Al-"+c.toUpperCase()).replace(/\s+/g," ").trim();return s||String(value||"");}
 function englishListingName(x){return x.name_en||knownEnglishNames[x.name_ar]||transliterateArabic(x.name_ar);}
 function englishLocality(value){return localityEnglish[value]||transliterateArabic(value);}
+function englishPlace(value){return value?englishLocality(value):'';}
 function englishFacilityType(value){const types={"مستشفى تخصصي للأطفال":"Specialized Children's Hospital","مستشفى":"Hospital","مركز صحي":"Health Center","مركز لغسيل الكلى":"Dialysis Center"};return types[value]||transliterateArabic(value);}
 
 async function query(path){const response=await fetch(BASE+path,{headers:{apikey:KEY,Accept:'application/json'}});if(!response.ok)throw new Error('تعذر تحميل البيانات');return response.json()}
@@ -101,7 +102,7 @@ const rows=listings.filter(x=>(!cat||String(x.category_id)===cat)&&(!st||x.state
 el('count').textContent=tr('count')+' '+rows.length;
 el('results').innerHTML=rows.length?rows.map(x=>{
 const category=categories.find(c=>c.id===x.category_id);
-const addr=(language==='en'?[states.find(s=>s[0]===x.state_ar)?.[1]||transliterateArabic(x.state_ar),x.city_ar,x.locality_ar?englishLocality(x.locality_ar):'',x.district_ar,x.street_ar,x.address_ar].filter(Boolean).join(', '):[x.state_ar,x.city_ar,x.locality_ar,x.district_ar,x.street_ar,x.address_ar].filter(Boolean).join('، '));
+const addr=(language==='en'?[states.find(s=>s[0]===x.state_ar)?.[1]||englishPlace(x.state_ar),englishPlace(x.city_ar),englishPlace(x.locality_ar),englishPlace(x.district_ar),englishPlace(x.street_ar),englishPlace(x.address_ar)].filter(Boolean).join(', '):[x.state_ar,x.city_ar,x.locality_ar,x.district_ar,x.street_ar,x.address_ar].filter(Boolean).join('، '));
 const facilityType=x.facility_type_ar?(language==='en'?englishFacilityType(x.facility_type_ar):x.facility_type_ar):'';
 const status=x.operating_status==='open'?tr('open'):x.operating_status==='temporarily_closed'?tr('temporary'):x.operating_status==='closed'?tr('closed'):'';
 const statusLine=status?'<div class="sub">'+tr('status')+' '+escapeHTML(status)+'</div>':'';
