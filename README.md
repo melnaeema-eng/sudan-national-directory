@@ -24,8 +24,8 @@ Public visitors can read published records and submit new or corrected informati
 ## Data snapshot (26 November 2026)
 
 - 13 directory categories.
-- 195 published listings, currently health facilities in Khartoum.
-- 163 pending suggestions: restaurants/cafés, bank branches, health-facility leads, and temporary university admissions centers.
+- 253 published listings: 195 health listings plus 58 restaurants and cafés across Port Sudan, Kassala, Wad Madani, Omdurman, and Nyala.
+- 105 suggestions remain pending: bank branches, health-facility leads, and temporary university admissions centers.
 - Seasonal admissions centers must be checked for dates and should not be represented as permanent university locations.
 - Phone, WhatsApp, opening hours, operating status, address, and map links are shown when provided. Missing values remain blank or unconfirmed instead of being invented.
 
