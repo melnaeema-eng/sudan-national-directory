@@ -34,7 +34,7 @@ h1{font-size:clamp(26px,4vw,38px);margin:18px 0 6px}.title p{margin:0;color:#e1f
 <header><div class="top"><a class="brand" href="./">🇸🇩 دليل السودان الشامل</a><div class="actions"><button class="btn outline" id="langBtn" type="button">English</button><button class="btn light hidden" id="signOut" type="button">تسجيل الخروج</button></div></div><div class="title" style="max-width:1050px;margin:22px auto 0;padding:0 16px"><h1 id="pageTitle">لوحة إدارة الدليل</h1><p id="subtitle">الجمهور يرسل البيانات؛ يمكنك تعديلها هنا ثم اعتمادها لتظهر للعامة.</p></div></header>
 <main>
 <section id="authPanel" class="panel auth">
-<h2 id="loginTitle">دخول المراجع</h2><p id="loginHelp">أرسل رابط دخول آمن إلى بريد المراجع المسجّل. لا نطلب كلمة مرور على هذه الصفحة.</p>
+<h2 id="loginTitle">دخول المراجع</h2><p id="loginHelp">أدخل بريد المراجع وكلمة مرور حسابه في Supabase Auth، ثم اضغط «دخول». لا تستخدم كلمة مرور قاعدة البيانات هنا.</p>
 <form id="loginForm"><label id="emailLabel" for="email">البريد الإلكتروني</label><input id="email" type="email" autocomplete="email" value="melnaeema@gmail.com" required><label id="passwordLabel" for="password">كلمة مرور حساب المراجع</label><input id="password" type="password" autocomplete="current-password" required><button class="btn approve" id="loginBtn" type="submit">دخول</button></form><button class="btn" id="otpBtn" type="button" style="margin-top:10px;background:#edf5ef;color:#075c40">أرسل رابط دخول بديلًا</button>
 <div id="authMessage" aria-live="polite"></div>
 </section>
