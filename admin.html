@@ -64,7 +64,7 @@ el("queueSearch").addEventListener("input",renderQueue);
 el("refreshQueue").addEventListener("click",refreshQueue);
 document.addEventListener("visibilitychange",()=>{if(!document.hidden&&signedUser)loadQueue(true);});
 window.addEventListener("focus",()=>{if(signedUser)loadQueue(true);});
-setInterval(()=>{if(signedUser&&!document.hidden)loadQueue(true);},30000);
+setInterval(()=>{if(signedUser&&!document.hidden)loadQueue(true);},60000);
 
 el("signOut").addEventListener("click",async()=>{await sb.auth.signOut();location.replace("./login.html");});
 sb.auth.onAuthStateChange((_event,session)=>{if(!session?.user){signedUser=null;location.replace("./login.html");return;}setTimeout(()=>enterReviewer(session.user),0);});
